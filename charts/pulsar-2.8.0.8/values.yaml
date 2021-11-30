@@ -133,7 +133,7 @@ images:
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   presto:
-    repository: streamnative/pulsar-all
+    repository: streamnative/pulsar
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the presto worker image
@@ -142,19 +142,19 @@ images:
   #   tag: 2.7.2.8
   #   pullPolicy: IfNotPresent
   broker:
-    repository: streamnative/sn-pulsar
+    repository: streamnative/pulsar-all
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   proxy:
-    repository: streamnative/sn-pulsar
+    repository: streamnative/pulsar
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   pulsar_detector:
-    repository: streamnative/sn-pulsar
+    repository: streamnative/pulsar-all
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   functions:
-    repository: streamnative/sn-pulsar
+    repository: streamnative/pulsar-all
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the toolset image

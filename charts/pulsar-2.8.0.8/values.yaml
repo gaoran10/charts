@@ -108,7 +108,7 @@ monitoring:
   # monitoring - grafana
   grafana: true
   # monitoring - node_exporter
-  node_exporter: true
+  node_exporter: false
   # alerting - alert-manager
   alert_manager: true
   # monitoring - loki
@@ -665,7 +665,7 @@ bookkeeper:
       # requests:
         # memory: 4Gi
         # cpu: 2
-  replicaCount: 4
+  replicaCount: 3
   ports:
     http: 8000
     bookie: 3181

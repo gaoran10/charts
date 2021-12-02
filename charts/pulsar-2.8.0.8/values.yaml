@@ -1242,7 +1242,7 @@ proxy:
     websockettls: 9443
   service:
     annotations: {}
-    type: ClusterIP
+    type: LoadBalancer
     extraSpec: {}
   ## Proxy PodDisruptionBudget
   ## templates/proxy-pdb.yaml

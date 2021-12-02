@@ -30,4 +30,3 @@ echo "change to use image version: $image_version"
 rm -rf charts/pulsar-custom
 cp -r charts/pulsar-2.8.0.8 charts/pulsar-custom
 sed -i "s/2.8.0.8/$image_version/g" charts/pulsar-custom/values.yaml
-sed -i "s/2.8.0/$image_version/g" charts/pulsar-custom/Chart.yaml

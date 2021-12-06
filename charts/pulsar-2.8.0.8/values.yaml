@@ -91,7 +91,7 @@ components:
   # pulsar sql
   sql_worker: false
   # kop
-  kop: false
+  kop: true
   # mop
   mop: false
   # pulsar detector
@@ -221,7 +221,7 @@ tls:
     cert_name: tls-broker
   # settings for generating certs for kop
   kop:
-    enabled: false
+    enabled: true
     jks:
       password: "[pulsar tls jks store password]"
     cert_name: tls-kop
@@ -384,9 +384,9 @@ ingress:
     annotations: {}
     extraSpec: {}
   kop:
-    enabled: false
+    enabled: true
     # NOTE: replace this with the actual domain when enabling ingress for KOP
-    external_domain: "<external_domain>"
+    external_domain: "pulsar.kop.service"
   ## templates/presto-service-ingress.yaml
   ##
   ## Ingresses for exposing presto service publicly
@@ -890,7 +890,7 @@ mop:
 
 # Istio is required for exposing Kafka service
 istio:
-  enable: false
+  enable: true
   gateway:
     selector:
       istio: "ingressgateway"

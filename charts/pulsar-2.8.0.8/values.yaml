@@ -142,7 +142,7 @@ images:
   #   tag: 2.7.2.8
   #   pullPolicy: IfNotPresent
   broker:
-    repository: streamnative/pulsar-all
+    repository: streamnative/sn-platform
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   proxy:
@@ -150,11 +150,11 @@ images:
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   pulsar_detector:
-    repository: streamnative/pulsar-all
+    repository: streamnative/sn-platform
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   functions:
-    repository: streamnative/pulsar-all
+    repository: streamnative/sn-platform
     tag: 2.8.0.8
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the toolset image
@@ -194,7 +194,7 @@ images:
 ## The chart is using cert-manager for provisioning TLS certs for
 ## brokers and proxies.
 tls:
-  enabled: false
+  enabled: true
   # common settings for generating certs
   common:
     # 90d
@@ -223,7 +223,7 @@ tls:
   kop:
     enabled: true
     jks:
-      password: "[pulsar tls jks store password]"
+      password: 123123
     cert_name: tls-kop
   # settings for generating certs for bookies
   bookie:
@@ -503,6 +503,7 @@ zookeeper:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8000"
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
@@ -694,14 +695,15 @@ bookkeeper:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
   resources:
     requests:
       memory: 512Mi
-      cpu: 0.2
+      cpu: 0.15
   # Definition of the serviceAccount used to run bookies.
   serviceAccount:
     # Specifies whether to use a service account to run this component
@@ -823,7 +825,8 @@ autorecovery:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   # tolerations: []
   gracePeriod: 30
@@ -890,7 +893,7 @@ mop:
 
 # Istio is required for exposing Kafka service
 istio:
-  enable: true
+  enabled: true
   gateway:
     selector:
       istio: "ingressgateway"
@@ -932,7 +935,8 @@ broker:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "true"
   tolerations: []
   securityContext: {}
   gracePeriod: 30
@@ -941,7 +945,7 @@ broker:
   resources:
     requests:
       memory: 512Mi
-      cpu: 0.2
+      cpu: 0.15
   extraInitContainers: []
   extraVolumes: []
   extraVolumeMounts: []
@@ -967,9 +971,9 @@ broker:
   # Automtically Roll Deployments when configmap is changed
   autoRollDeployment: true
   configData:
-    PULSAR_PREFIX_transactionCoordinatorEnabled: "true"
-    PULSAR_PREFIX_acknowledgmentAtBatchIndexLevelEnabled: "true"
-    PULSAR_PREFIX_brokerDeduplicationEnabled: "true"
+#    PULSAR_PREFIX_transactionCoordinatorEnabled: "false"
+#    PULSAR_PREFIX_acknowledgmentAtBatchIndexLevelEnabled: "true"
+#    PULSAR_PREFIX_brokerDeduplicationEnabled: "true"
     PULSAR_MEM: >
       -Xms128m -Xmx256m -XX:MaxDirectMemorySize=256m
     PULSAR_GC: >
@@ -1157,14 +1161,15 @@ proxy:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
   resources:
     requests:
       memory: 128Mi
-      cpu: 0.2
+      cpu: 0.15
   extraInitContainers: []
   extraVolumes: []
   extraVolumeMounts: []
@@ -1263,7 +1268,8 @@ toolset:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   resources:
@@ -1367,7 +1373,8 @@ prometheus:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   port: 9090
@@ -1503,7 +1510,8 @@ grafana:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   port: 3000
@@ -1572,7 +1580,8 @@ grafana:
 
 node_exporter:
   component: node-exporter
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   limits:
     cpu: 10m
     memory: 50Mi
@@ -1583,7 +1592,8 @@ node_exporter:
 alert_manager:
   component: alert-manager
   port: 9093
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   replicaCount: 1
   gracePeriod: 0
   resources:
@@ -1652,7 +1662,8 @@ pulsar_manager:
       periodSeconds: 30
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   resources:
@@ -1760,7 +1771,8 @@ presto:
       # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
       # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
       type: preferredDuringSchedulingIgnoredDuringExecution
-    annotations: {}
+    annotations:
+      sidecar.istio.io/inject: "false"
     gracePeriod: 10
     ports:
       http: 8081
@@ -1814,7 +1826,8 @@ presto:
       # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
       # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
       type: preferredDuringSchedulingIgnoredDuringExecution
-    annotations: {}
+    annotations:
+      sidecar.istio.io/inject: "false"
     gracePeriod: 10
     ports:
       http: 8081

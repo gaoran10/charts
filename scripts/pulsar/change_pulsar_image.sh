@@ -18,15 +18,22 @@
 # under the License.
 #
 
-image_version="$1"
+image_name="$1"
+image_version="$2"
 
-if [ -z "$image_version" ]; then
-  echo "Error: image_version is not set";
+if [ -z "$image_name" ]; then
+  echo "Error: image name is not set"
   exit 1;
 fi
 
-echo "change to use image version: $image_version"
+if [ -z "$image_version" ]; then
+  echo "Error: image version is not set";
+  exit 1;
+fi
+
+echo "change to use image: $image_name:$image_version"
 
 rm -rf charts/pulsar-custom
 cp -r charts/pulsar-2.8.0.8 charts/pulsar-custom
+sed -i "s#streamnative/sn-platform#$image_name#" charts/pulsar-custom/values.yaml
 sed -i "s/2.8.0.8/$image_version/g" charts/pulsar-custom/values.yaml

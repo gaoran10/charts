@@ -18,7 +18,7 @@
 #
 
 {{- if and .Values.components.broker .Values.istio.enabled .Values.components.kop .Values.tls.kop.enabled .Values.ingress.kop.enabled }}
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: "{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}"

@@ -91,7 +91,7 @@ components:
   # pulsar sql
   sql_worker: false
   # kop
-  kop: true
+  kop: false
   # mop
   mop: false
   # pulsar detector

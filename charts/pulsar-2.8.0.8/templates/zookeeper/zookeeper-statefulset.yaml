@@ -169,7 +169,7 @@ spec:
           {{- range $server := .Values.zookeeper.reconfig.zkServers }}
           echo "{{ $server }}" >> conf/zookeeper.conf;
           {{- end }}
-          mkdir -p /pulsar/data/zookeeper
+          mkdir -p /pulsar/data/zookeeper;
           bin/gen-zk-conf.sh conf/zookeeper.conf {{ .Values.zookeeper.initialMyId }} {{ .Values.zookeeper.peerType }};
           cat conf/zookeeper.conf;
           bin/pulsar zookeeper;

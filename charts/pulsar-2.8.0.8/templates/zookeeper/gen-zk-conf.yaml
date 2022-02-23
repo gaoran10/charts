@@ -54,6 +54,9 @@ data:
     do
         echo "server.$IDX=$SERVER.$ZOOKEEPER_DOMAIN:2888:3888:${PEER_TYPE};2181" >> $CONF_FILE
     
+        echo "server => $SERVER"
+        echo "HOSTNAME => $HOSTNAME"
+
         if [ "$HOSTNAME" == "$SERVER" ]; then
             MY_ID=$IDX
             echo "Current server id $MY_ID"

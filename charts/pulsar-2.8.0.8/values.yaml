@@ -504,7 +504,10 @@ zookeeper:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8000"
     sidecar.istio.io/inject: "false"
-  securityContext: {}
+  securityContext:
+    runAsUser: 10000
+    runAsGroup: 0
+    fsGroup: 0
   tolerations: []
   gracePeriod: 30
   resources:

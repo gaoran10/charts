@@ -976,8 +976,8 @@ broker:
   autoRollDeployment: true
   configData:
     PULSAR_PREFIX_transactionCoordinatorEnabled: "false"
-    PULSAR_PREFIX_acknowledgmentAtBatchIndexLevelEnabled: "true"
-    PULSAR_PREFIX_brokerDeduplicationEnabled: "true"
+    PULSAR_PREFIX_acknowledgmentAtBatchIndexLevelEnabled: "false"
+    PULSAR_PREFIX_brokerDeduplicationEnabled: "false"
     PULSAR_MEM: >
       -Xms128m -Xmx256m -XX:MaxDirectMemorySize=256m
     PULSAR_GC: >

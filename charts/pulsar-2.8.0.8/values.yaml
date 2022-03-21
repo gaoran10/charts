@@ -379,7 +379,7 @@ ingress:
   ##
   ## Ingresses for exposing pulsar service publicly
   broker:
-    enabled: false
+    enabled: true
     type: LoadBalancer
     annotations: {}
     extraSpec: {}

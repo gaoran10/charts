@@ -91,7 +91,7 @@ components:
   # pulsar sql
   sql_worker: false
   # kop
-  kop: true
+  kop: false
   # mop
   mop: false
   # pulsar detector
@@ -886,6 +886,7 @@ kop:
 mop:
   ports:
     plaintext: 1883
+    proxy_plaintext: 1884
     tls_psk: 5684
   # TLS PSK is introduced since sn-pulsar:2.8.1.1
   tls_psk:

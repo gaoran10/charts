@@ -262,7 +262,7 @@ spec:
         {{- if .Values.components.mop }}
         - name: mqtt
           containerPort: {{ .Values.mop.ports.plaintext }}
-        - name: mqtt-proxy-plaintext
+        - name: mqtt-proxy
           containerPort: {{ .Values.mop.ports.proxy_plaintext }}
         {{- if .Values.mop.tls_psk.enabled }}
         - name: mqtt-tls-psk

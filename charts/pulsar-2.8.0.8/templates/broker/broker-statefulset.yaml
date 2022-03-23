@@ -296,9 +296,9 @@ spec:
         - name: PULSAR_PREFIX_mqttListeners
           value: mqtt://$(POD_NAME).{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}:{{ .Values.mop.ports.plaintext }}
         - name: PULSAR_PREFIX_mqttProxyEnabled
-          value: true
+          value: "true"
         - name: PULSAR_PREFIX_mqttProxyPort
-          value: {{ .Values.mop.ports.proxy_plaintext }}
+          value: "{{ .Values.mop.ports.proxy_plaintext }}"
         {{- end }}
         {{- if and .Values.components.kop }}
         {{- if .Values.ingress.kop.enabled }}

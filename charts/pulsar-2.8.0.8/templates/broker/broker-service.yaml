@@ -55,7 +55,7 @@ spec:
   - name: mqtt
     port: {{ .Values.mop.ports.plaintext }}
   - name: mqtt-proxy
-    port: { { .Values.mop.ports.proxy_plaintext } }
+    port: {{ .Values.mop.ports.proxy_plaintext }}
   {{- if .Values.mop.tls_psk.enabled }}
   - name: mqtt-tls-psk
     port: {{ .Values.mop.ports.tls_psk }}

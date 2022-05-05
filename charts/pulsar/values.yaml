@@ -111,15 +111,15 @@ components:
 ## Control what components of the monitoring stack to deploy for the cluster
 monitoring:
   # monitoring - prometheus
-  prometheus: true
+  prometheus: false
   # monitoring - grafana
-  grafana: true
+  grafana: false
   # monitoring - node_exporter
-  node_exporter: true
+  node_exporter: false
   # alerting - alert-manager
-  alert_manager: true
+  alert_manager: false
   # monitoring - loki
-  loki: true
+  loki: false
   # monitoring - datadog
   datadog: false
 
@@ -927,6 +927,10 @@ mop:
     identityHint: "[ADD HINT]"
     secret: "[ADD SECRET]"
 
+aop:
+  ports:
+    plaintext: 5672
+    proxy: 5682
 
 # Istio is required for exposing Kafka service
 istio:

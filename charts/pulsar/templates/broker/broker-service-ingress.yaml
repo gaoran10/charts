@@ -33,6 +33,10 @@ metadata:
 spec:
   type: {{ .Values.ingress.broker.type }}
   ports:
+  - name: aop
+    port: 5672
+  - name: aopproxy
+    port: 5682
   # prometheus needs to access /metrics endpoint
   - name: http
     port: {{ .Values.broker.ports.http }}

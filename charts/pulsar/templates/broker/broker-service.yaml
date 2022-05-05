@@ -31,6 +31,10 @@ metadata:
 spec:
   ports:
   # prometheus needs to access /metrics endpoint
+  - name: aop
+    port: 5672
+  - name: aop-proxy
+    port: 5682
   - name: http
     port: {{ .Values.broker.ports.http }}
   {{- if and .Values.tls.enabled .Values.tls.broker.enabled }}

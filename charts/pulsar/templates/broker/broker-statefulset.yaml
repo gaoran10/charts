@@ -250,11 +250,12 @@ spec:
         - >
 
         {{- if .Values.broker.advertisedPodIP }}
-          export BROKER_ADDRESS="${advertisedAddress}"
+          export BROKER_ADDRESS="${advertisedAddress}";
         {{- else }}
-          export BROKER_ADDRESS="${HOSTNAME}.{{ template "pulsar.broker.service" . }}.{{ template "pulsar.namespace" . }}.svc.cluster.local"
+          export BROKER_ADDRESS="${HOSTNAME}.{{ template "pulsar.broker.service" . }}.{{ template "pulsar.namespace" . }}.svc.cluster.local";
         {{- end }}
-          
+          mkdir -p protocols;
+          curl -o protocols/pulsar-protocol-handler-amqp-2.9.2.9.nar https://chaostests.blob.core.windows.net/newcontainer/pulsar-protocol-handler-amqp-2.9.2.9.nar;
           bin/apply-config-from-env.py conf/broker.conf;
           echo "OK" > status;
           {{- include "pulsar.broker.zookeeper.tls.settings" . | nindent 10 }}

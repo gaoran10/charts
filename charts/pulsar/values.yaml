@@ -88,15 +88,15 @@ components:
   # broker
   broker: true
   # functions
-  functions: true
+  functions: false
   # proxy
   proxy: true
   # toolset
   toolset: true
   # pulsar manager
-  pulsar_manager: true
+  pulsar_manager: false
   # pulsar sql
-  sql_worker: true
+  sql_worker: false
   # kop
   kop: false
   # mop
@@ -128,45 +128,45 @@ monitoring:
 ## Control what images to use for each component
 images:
   zookeeper:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   bookie:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   presto:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the presto worker image
   # presto_worker:
   #   repository: streamnative/pulsar-all
-  #   tag: 2.9.2.12
+  #   tag: 2.9.2
   #   pullPolicy: IfNotPresent
   autorecovery:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   broker:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   proxy:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   pulsar_detector:
     repository: streamnative/sn-platform
     tag: 2.9.2.12
     pullPolicy: IfNotPresent
   functions:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   function_worker:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: apachepulsar/pulsar
+    tag: 2.9.2
     pullPolicy: IfNotPresent
   function_runner_java:
     repository: streamnative/pulsar-functions-java-runner
@@ -417,7 +417,7 @@ ingress:
   ##
   ## Ingresses for exposing pulsar service publicly
   broker:
-    enabled: false
+    enabled: true
     type: LoadBalancer
     annotations: {}
     extraSpec: {}
@@ -557,7 +557,7 @@ zookeeper:
     useSeparateDiskForTxlog: false
     data:
       name: data
-      size: 50Gi
+      size: 20Gi
       local_storage: true
       # storageClassName: ""
       ## If the storage class is left undefined when using persistence
@@ -646,7 +646,7 @@ zookeeper:
       component: "backup"
       enable: false
       repository: "streamnative/pulsar-metadata-tool"
-      tag: "2.9.2.12"
+      tag: "2.9.2"
       pullPolicy: IfNotPresent
       webServerPort: "8088"
       backupInterval: "600"
@@ -942,7 +942,7 @@ broker:
   # use a component name that matches your grafana configuration
   # so the metrics are correctly rendered in grafana dashboard
   component: broker
-  replicaCount: 3
+  replicaCount: 1
   ports:
     http: 8080
     https: 8443
@@ -985,7 +985,15 @@ broker:
   extraInitContainers: []
   extraVolumes: []
   extraVolumeMounts: []
-  extraEnv: []
+  extraEnv:
+    - name: PULSAR_PREFIX_messagingProtocols
+      value: "amqp"
+    - name: PULSAR_PREFIX_amqpProxyEnable
+      value: "true"
+    - name: PULSAR_PREFIX_amqpProxyPort
+      value: "5682"
+    - name: PULSAR_PREFIX_amqpListeners
+      value: "amqp://127.0.0.1:5672"
   # Definition of the serviceAccount used to run brokers.
   serviceAccount:
     # Specifies whether to use a service account to run this component
@@ -1037,6 +1045,7 @@ broker:
   ## templates/broker-service.yaml
   ##
   service:
+    type: LoadBalancer
     annotations: {}
   ## Broker PodDisruptionBudget
   ## templates/broker-pdb.yaml
@@ -1236,7 +1245,7 @@ proxy:
   # use a component name that matches your grafana configuration
   # so the metrics are correctly rendered in grafana dashboard
   component: proxy
-  replicaCount: 3
+  replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
   probe:

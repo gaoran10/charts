@@ -29,6 +29,9 @@ metadata:
     component: {{ .Values.pulsar_metadata.component }}
 spec:
   template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'false'
     spec:
       initContainers:
       {{- if .Values.pulsar_metadata.configurationStore }}

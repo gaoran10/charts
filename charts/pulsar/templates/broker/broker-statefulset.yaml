@@ -297,6 +297,8 @@ spec:
         {{- if .Values.components.mop }}
         - name: mqtt
           containerPort: {{ .Values.mop.ports.plaintext }}
+        - name: mqtt-proxy
+          containerPort: { { .Values.mop.ports.proxy_plaintext } }
         {{- if .Values.mop.tls_psk.enabled }}
         - name: mqtt-tls-psk
           containerPort: {{ .Values.mop.ports.tls_psk }}
@@ -330,6 +332,10 @@ spec:
         {{- if .Values.components.mop }}
         - name: PULSAR_PREFIX_mqttListeners
           value: mqtt://$(POD_NAME).{{ template "pulsar.fullname" . }}-{{ .Values.broker.component }}:{{ .Values.mop.ports.plaintext }}
+        - name: PULSAR_PREFIX_mqttProxyEnabled
+          value: "true"
+        - name: PULSAR_PREFIX_mqttProxyPort
+          value: "{{ .Values.mop.ports.proxy_plaintext }}"
         {{- end }}
         {{- if and .Values.components.kop }}
         {{- if .Values.ingress.kop.enabled }}
@@ -339,20 +345,11 @@ spec:
         - name: PULSAR_PREFIX_kafkaListeners
           value: SSL://$(POD_NAME).{{ template "pulsar.broker.service.fqn" . }}:{{ .Values.kop.ports.ssl }}
         - name: PULSAR_PREFIX_kopSslKeystorePassword
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "pulsar.fullname" . }}-{{ .Values.tls.proxy.cert_name }}-jks-passwd"
-              key: password
+          value: "{{ .Values.tls.kop.jks.password }}"
         - name: PULSAR_PREFIX_kopSslKeyPassword
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "pulsar.fullname" . }}-{{ .Values.tls.proxy.cert_name }}-jks-passwd"
-              key: password
+          value: "{{ .Values.tls.kop.jks.password }}"
         - name: PULSAR_PREFIX_kopSslTruststorePassword
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "pulsar.fullname" . }}-{{ .Values.tls.proxy.cert_name }}-jks-passwd"
-              key: password
+          value: "{{ .Values.tls.kop.jks.password }}"
         {{- else }}
         - name: PULSAR_PREFIX_kafkaAdvertisedListeners
           value: PLAINTEXT://$(POD_NAME).{{ .Values.ingress.kop.external_domain }}:{{ .Values.kop.ports.plaintext }}

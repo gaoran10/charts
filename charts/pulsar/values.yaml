@@ -88,7 +88,7 @@ components:
   # broker
   broker: true
   # functions
-  functions: true
+  functions: false
   # proxy
   proxy: true
   # toolset
@@ -96,7 +96,7 @@ components:
   # pulsar manager
   pulsar_manager: true
   # pulsar sql
-  sql_worker: true
+  sql_worker: false
   # kop
   kop: false
   # mop
@@ -255,7 +255,7 @@ tls:
   kop:
     enabled: false
     jks:
-      password: "[pulsar tls jks store password]"
+      password: 123123
     cert_name: tls-kop
   # settings for generating certs for bookies
   bookie:
@@ -541,6 +541,7 @@ zookeeper:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8000"
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
@@ -732,7 +733,8 @@ bookkeeper:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
@@ -861,7 +863,8 @@ autorecovery:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   # tolerations: []
   gracePeriod: 30
@@ -919,6 +922,7 @@ kop:
 mop:
   ports:
     plaintext: 1883
+    proxy_plaintext: 1884
     tls_psk: 5684
   # TLS PSK is introduced since sn-pulsar:2.8.1.1
   tls_psk:
@@ -930,7 +934,7 @@ mop:
 
 # Istio is required for exposing Kafka service
 istio:
-  enable: false
+  enable: true
   gateway:
     selector:
       istio: "ingressgateway"
@@ -972,7 +976,8 @@ broker:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "true"
   tolerations: []
   securityContext: {}
   gracePeriod: 30
@@ -1135,7 +1140,8 @@ functions:
     # whether to create a cluster role
     clusterRole: true
   autoRollDeployment: true
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   ports:
     http: 8080
     https: 8443
@@ -1231,6 +1237,8 @@ pulsar_detector:
   pdb:
     usePolicy: true
     maxUnavailable: 1
+  annotations:
+    sidecar.istio.io/inject: "false"
 ## Pulsar: Proxy Cluster
 ## templates/proxy-statefulset.yaml
 ##
@@ -1263,7 +1271,8 @@ proxy:
     # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
     # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
     type: preferredDuringSchedulingIgnoredDuringExecution
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   securityContext: {}
   tolerations: []
   gracePeriod: 30
@@ -1369,7 +1378,8 @@ toolset:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   resources:
@@ -1474,7 +1484,8 @@ prometheus:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   port: 9090
@@ -1611,7 +1622,8 @@ grafana:
   replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   port: 3000
@@ -1681,7 +1693,8 @@ grafana:
 
 node_exporter:
   component: node-exporter
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   limits:
     cpu: 10m
     memory: 50Mi
@@ -1692,7 +1705,8 @@ node_exporter:
 alert_manager:
   component: alert-manager
   port: 9093
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   replicaCount: 1
   gracePeriod: 0
   resources:
@@ -1761,7 +1775,8 @@ pulsar_manager:
       periodSeconds: 30
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
-  annotations: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
   tolerations: []
   gracePeriod: 0
   resources:
@@ -1869,7 +1884,8 @@ presto:
       # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
       # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
       type: preferredDuringSchedulingIgnoredDuringExecution
-    annotations: {}
+    annotations:
+      sidecar.istio.io/inject: "false"
     gracePeriod: 10
     ports:
       http: 8081
@@ -1924,7 +1940,8 @@ presto:
       # requiredDuringSchedulingIgnoredDuringExecution - rules must be met for pod to be scheduled (hard) requires at least one node per replica
       # preferredDuringSchedulingIgnoredDuringExecution - scheduler will try to enforce but not guranentee
       type: preferredDuringSchedulingIgnoredDuringExecution
-    annotations: {}
+    annotations:
+      sidecar.istio.io/inject: "false"
     gracePeriod: 10
     ports:
       http: 8081

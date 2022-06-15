@@ -704,7 +704,7 @@ bookkeeper:
       # requests:
         # memory: 4Gi
         # cpu: 2
-  replicaCount: 4
+  replicaCount: 3
   ports:
     http: 8000
     bookie: 3181

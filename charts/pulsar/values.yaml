@@ -527,14 +527,14 @@ zookeeper:
   probe:
     liveness:
       enabled: true
-      failureThreshold: 10
-      initialDelaySeconds: 10
+      failureThreshold: 30
+      initialDelaySeconds: 30
       periodSeconds: 30
       timeoutSeconds: 5
     readiness:
       enabled: true
-      failureThreshold: 10
-      initialDelaySeconds: 10
+      failureThreshold: 30
+      initialDelaySeconds: 30
       periodSeconds: 30
       timeoutSeconds: 5
     startup:

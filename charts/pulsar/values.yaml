@@ -195,7 +195,7 @@ images:
     pullPolicy: IfNotPresent
   grafana:
     repository: streamnative/apache-pulsar-grafana-dashboard-k8s
-    tag: 0.0.16
+    tag: 0.0.15
     pullPolicy: IfNotPresent
   pulsar_manager:
     repository: streamnative/pulsar-manager
@@ -425,14 +425,14 @@ ingress:
   ##
   ## Ingresses for exposing pulsar service publicly
   broker:
-    enabled: false
+    enabled: true
     type: LoadBalancer
     annotations: {}
     extraSpec: {}
   kop:
-    enabled: false
+    enabled: true
     # NOTE: replace this with the actual domain when enabling ingress for KOP
-    external_domain: "<external_domain>"
+    external_domain: "pulsar.kop.service"
   ## templates/presto-service-ingress.yaml
   ##
   ## Ingresses for exposing presto service publicly
@@ -527,22 +527,19 @@ zookeeper:
   probe:
     liveness:
       enabled: true
-      failureThreshold: 30
-      initialDelaySeconds: 30
+      failureThreshold: 10
+      initialDelaySeconds: 10
       periodSeconds: 30
-      timeoutSeconds: 30
     readiness:
       enabled: true
-      failureThreshold: 30
-      initialDelaySeconds: 30
+      failureThreshold: 10
+      initialDelaySeconds: 10
       periodSeconds: 30
-      timeoutSeconds: 30
     startup:
       enabled: false
       failureThreshold: 30
       initialDelaySeconds: 10
       periodSeconds: 30
-      timeoutSeconds: 30
   affinity:
     anti_affinity: true
     # Set the anti affinity type. Valid values:
@@ -1390,7 +1387,7 @@ proxy:
     annotations: {}
   service:
     annotations: {}
-    type: ClusterIP
+    type: LoadBalancer
     extraSpec: {}
   ## Proxy PodDisruptionBudget
   ## templates/proxy-pdb.yaml
@@ -1585,7 +1582,7 @@ prometheus:
   ##
   service:
     # expose the load balancer
-    # type: LoadBalancer
+    type: LoadBalancer
     annotations: {}
 
 datadog:

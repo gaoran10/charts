@@ -1560,7 +1560,7 @@ prometheus:
   ##
   service:
     # expose the load balancer
-    type: LoadBalancer
+    # type: LoadBalancer
     annotations: {}
 
 datadog:
@@ -1679,7 +1679,7 @@ grafana:
   ##
   service:
     # spec:
-    # type: clusterIP
+    type: LoadBalancer
     annotations: {}
   datasources:
     loki: loki

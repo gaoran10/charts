@@ -195,7 +195,7 @@ images:
     pullPolicy: IfNotPresent
   grafana:
     repository: streamnative/apache-pulsar-grafana-dashboard-k8s
-    tag: 0.0.17
+    tag: 0.0.16
     pullPolicy: IfNotPresent
   pulsar_manager:
     repository: streamnative/pulsar-manager
@@ -530,18 +530,19 @@ zookeeper:
       failureThreshold: 30
       initialDelaySeconds: 30
       periodSeconds: 30
-      timeoutSeconds: 5
+      timeoutSeconds: 30
     readiness:
       enabled: true
       failureThreshold: 30
       initialDelaySeconds: 30
       periodSeconds: 30
-      timeoutSeconds: 5
+      timeoutSeconds: 30
     startup:
       enabled: false
       failureThreshold: 30
       initialDelaySeconds: 10
       periodSeconds: 30
+      timeoutSeconds: 30
   affinity:
     anti_affinity: true
     # Set the anti affinity type. Valid values:

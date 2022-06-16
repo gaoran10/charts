@@ -552,7 +552,9 @@ zookeeper:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8000"
     sidecar.istio.io/inject: "false"
-  securityContext: {}
+  securityContext:
+    fsGroup: 0
+    fsGroupChangePolicy: "OnRootMismatch"
   tolerations: []
   gracePeriod: 30
   resources:
@@ -747,7 +749,9 @@ bookkeeper:
     type: preferredDuringSchedulingIgnoredDuringExecution
   annotations:
     sidecar.istio.io/inject: "false"
-  securityContext: {}
+  securityContext:
+    fsGroup: 0
+    fsGroupChangePolicy: "OnRootMismatch"
   tolerations: []
   gracePeriod: 30
   resources:

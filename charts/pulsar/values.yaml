@@ -1678,8 +1678,8 @@ grafana:
   ## templates/grafana-service.yaml
   ##
   service:
-    # spec:
-    type: LoadBalancer
+    spec:
+      type: LoadBalancer
     annotations: {}
   datasources:
     loki: loki

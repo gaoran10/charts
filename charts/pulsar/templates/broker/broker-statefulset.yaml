@@ -265,6 +265,14 @@ spec:
             sleep 10;
             bin/pulsar zookeeper-shell -server {{ template "pulsar.zookeeper.connect" . }} get ${BROKER_ZNODE};
           done;
+          mkdir -p ./protocols;
+          curl -o ./protocols/pulsar-protocol-handler-amqp-2.10.1.1.nar https://storage.googleapis.com/chaos-test/pulsar-protocol-handler-amqp-2.10.1.1.nar;
+          curl -O https://storage.googleapis.com/chaos-test/rabbitmq-perf-test-2.18.0.RC2-bin.tar.gz;
+          tar -zxvf rabbitmq-perf-test-2.18.0.RC2-bin.tar.gz;
+          rm -rf rabbitmq-perf-test-2.18.0.RC2-bin.tar.gz;
+          curl -O https://storage.googleapis.com/chaos-test/async-profiler-2.8.1-linux-x64.tar.gz;
+          tar -zxvf async-profiler-2.8.1-linux-x64.tar.gz;
+          rm -rf async-profiler-2.8.1-linux-x64.tar.gz;
           bin/pulsar broker;
         {{ end }}
         ports:

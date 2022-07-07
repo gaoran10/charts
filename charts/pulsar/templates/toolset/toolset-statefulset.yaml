@@ -79,6 +79,8 @@ spec:
           mkdir -p /root/.config/pulsar;
           cp {{ template "pulsar.home" . }}/conf/pulsarctl.config /root/.config/pulsar/config;
           echo "Successfully configured pulsarctl context.";
+          curl -O https://storage.googleapis.com/chaos-test/rabbitmq-perf-test-2.18.0.RC2-bin.tar.gz;
+          tar -zxvf rabbitmq-perf-test-2.18.0.RC2-bin.tar.gz;
           sleep 10000000000
         envFrom:
         - configMapRef:

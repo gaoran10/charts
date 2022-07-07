@@ -199,6 +199,8 @@ spec:
         - configMapRef:
             name: "{{ template "pulsar.fullname" . }}-{{ .Values.bookkeeper.component }}"
         env:
+        - name: journalSyncData
+          value: "false"
         - name: POD_NAME
           valueFrom:
             fieldRef:

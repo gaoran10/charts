@@ -94,7 +94,7 @@ components:
   # toolset
   toolset: true
   # pulsar manager
-  pulsar_manager: true
+  pulsar_manager: false
   # pulsar sql
   sql_worker: false
   # kop
@@ -117,9 +117,9 @@ monitoring:
   # monitoring - node_exporter
   node_exporter: false
   # alerting - alert-manager
-  alert_manager: true
+  alert_manager: false
   # monitoring - loki
-  loki: true
+  loki: false
   # monitoring - datadog
   datadog: false
 
@@ -128,62 +128,62 @@ monitoring:
 ## Control what images to use for each component
 images:
   zookeeper:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   bookie:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   presto:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the presto worker image
   # presto_worker:
-  #   repository: streamnative/pulsar-all
-  #   tag: 2.9.2.12
+  #   repository: streamnative/pulsar
+  #   tag: 2.10.1.1
   #   pullPolicy: IfNotPresent
   autorecovery:
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   broker:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   proxy:
-    repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   pulsar_detector:
     repository: streamnative/sn-platform
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   functions:
     repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   function_worker:
     repository: streamnative/sn-pulsar
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   function_runner_java:
     repository: streamnative/pulsar-functions-java-runner
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   function_runner_go:
     repository: streamnative/pulsar-functions-go-runner
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   function_runner_python:
     repository: streamnative/pulsar-functions-python-runner
-    tag: 2.9.2.12
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   # NOTE: allow overriding the toolset image
   # toolset:
-  #   repository: streamnative/pulsar-all
-  #   tag: 2.9.2.12
+  #   repository: streamnative/pulsar
+  #   tag: 2.10.1.1
   #   pullPolicy: IfNotPresent
   prometheus:
     repository: prom/prometheus
@@ -652,7 +652,7 @@ zookeeper:
       component: "backup"
       enable: false
       repository: "streamnative/pulsar-metadata-tool"
-      tag: "2.9.2.12"
+      tag: "2.10.1.1"
       pullPolicy: IfNotPresent
       webServerPort: "8088"
       backupInterval: "600"
@@ -678,7 +678,7 @@ zookeeper:
       component: "restore"
       enable: false
       repository: "streamnative/pulsar-metadata-tool"
-      tag: "2.9.2.12"
+      tag: "2.10.1.1"
       pullPolicy: IfNotPresent
       restorePoint: ""
       restoreVersion: "1"
@@ -747,8 +747,8 @@ bookkeeper:
   gracePeriod: 30
   resources:
     requests:
-      memory: 512Mi
-      cpu: 0.2
+      memory: 5Gi
+      cpu: 3
   # Definition of the serviceAccount used to run bookies.
   serviceAccount:
     # Specifies whether to use a service account to run this component
@@ -788,7 +788,7 @@ bookkeeper:
       #     iopsPerGB: "50"
     ledgers:
       name: ledgers
-      size: 50Gi
+      size: 500Gi
       local_storage: true
       # storageClassName: ""
       ## If the storage class is left undefined when using persistence
@@ -816,9 +816,9 @@ bookkeeper:
   configData:
     # `BOOKIE_MEM` is used for `bookie shell`
     BOOKIE_MEM: >
-      -Xms128m
-      -Xmx256m
-      -XX:MaxDirectMemorySize=256m
+      -Xms2g
+      -Xmx4g
+      -XX:MaxDirectMemorySize=512m
     # we use `bin/pulsar` for starting bookie daemons
     PULSAR_MEM: >
       -Xms128m
@@ -839,6 +839,9 @@ bookkeeper:
       -XX:+ExitOnOutOfMemoryError
       -XX:+PerfDisableSharedMem
       -verbosegc
+  extraEnv:
+    - name: "journalSyncData"
+      value: "false"
   ## Bookkeeper Service
   ## templates/bookkeeper-service.yaml
   ##
@@ -901,8 +904,8 @@ pulsar_metadata:
     # the image used for running `pulsar-cluster-initialize` job
     # repository: apachepulsar/pulsar-all
     # tag: 2.5.0
-    repository: streamnative/pulsar-all
-    tag: 2.9.2.12
+    repository: streamnative/pulsar
+    tag: 2.10.1.1
     pullPolicy: IfNotPresent
   ## set an existing configuration store
   # configurationStore:
@@ -959,6 +962,8 @@ broker:
     https: 8443
     pulsar: 6650
     pulsarssl: 6651
+    aop: 5672
+    aopproxy: 5682
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
   probe:
@@ -992,12 +997,50 @@ broker:
   advertisedPodIP: false
   resources:
     requests:
-      memory: 512Mi
-      cpu: 0.2
+      memory: 10Gi
+      cpu: 5
   extraInitContainers: []
   extraVolumes: []
   extraVolumeMounts: []
-  extraEnv: []
+  extraEnv:
+    - name: "PULSAR_PREFIX_messagingProtocols"
+      value: "amqp"
+    - name: "PULSAR_PREFIX_protocolHandlerDirectory"
+      value: "./protocols"
+    - name: "PULSAR_PREFIX_amqpProxyEnable"
+      value: "true"
+    - name: "PULSAR_PREFIX_amqpProxyPort"
+      value: "5682"
+    - name: "PULSAR_PREFIX_amqpEnableMetrics"
+      value: "true"
+    - name: "managedLedgerCacheEvictionFrequency"
+      value: "0.01"
+    - name: "managedLedgerCacheEvictionTimeThresholdMillis"
+      value: "100000"
+    - name: "managedLedgerDefaultEnsembleSize"
+      value: "2"
+    - name: "managedLedgerDefaultWriteQuorum"
+      value: "2"
+    - name: "managedLedgerDefaultAckQuorum"
+      value: "2"
+    - name: "exposeTopicLevelMetricsInPrometheus"
+      value: "false"
+    - name: "managedLedgerCacheSizeMB"
+      value: "1000"
+    - name: "loadBalancerEnabled"
+      value: "false"
+    - name: "loadBalancerSheddingEnabled"
+      value: "false"
+    - name: "loadBalancerAutoBundleSplitEnabled"
+      value: "false"
+    - name: "loadBalancerAutoUnloadSplitBundlesEnabled"
+      value: "false"
+    - name: "dispatcherMaxReadBatchSize"
+      value: "1000"
+    - name: "loadBalancerNamespaceMaximumBundles"
+      value: "1"
+    - name: "defaultNumberOfNamespaceBundles"
+      value: "1"
   # Definition of the serviceAccount used to run brokers.
   serviceAccount:
     # Specifies whether to use a service account to run this component
@@ -1020,7 +1063,7 @@ broker:
   autoRollDeployment: true
   configData:
     PULSAR_MEM: >
-      -Xms128m -Xmx256m -XX:MaxDirectMemorySize=256m
+      -Xms8g -Xmx8g -XX:MaxDirectMemorySize=2g
     PULSAR_GC: >
       -XX:+UseG1GC
       -XX:MaxGCPauseMillis=10
@@ -1030,8 +1073,8 @@ broker:
       -XX:+UnlockExperimentalVMOptions
       -XX:+AggressiveOpts
       -XX:+DoEscapeAnalysis
-      -XX:ParallelGCThreads=4
-      -XX:ConcGCThreads=4
+      -XX:ParallelGCThreads=6
+      -XX:ConcGCThreads=6
       -XX:G1NewSizePercent=50
       -XX:+DisableExplicitGC
       -XX:-ResizePLAB
@@ -1253,7 +1296,7 @@ proxy:
   # use a component name that matches your grafana configuration
   # so the metrics are correctly rendered in grafana dashboard
   component: proxy
-  replicaCount: 3
+  replicaCount: 1
   # nodeSelector:
     # cloud.google.com/gke-nodepool: default-pool
   probe:
@@ -1391,8 +1434,8 @@ toolset:
   gracePeriod: 0
   resources:
     requests:
-      memory: 256Mi
-      cpu: 0.1
+      memory: 512Mi
+      cpu: 0.2
   ## Bastion configmap
   ## templates/bastion-configmap.yaml
   ##

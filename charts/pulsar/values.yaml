@@ -151,7 +151,7 @@ images:
   broker:
     repository: streamnative/sn-pulsar
     tag: 2.9.2.12
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   proxy:
     repository: streamnative/sn-pulsar
     tag: 2.9.2.12
